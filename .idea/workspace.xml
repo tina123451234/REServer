@@ -4,8 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="de501043-aafb-4a41-9e24-49285bd605ad" name="Changes" comment="remove unused imports">
+    <list default="true" id="de501043-aafb-4a41-9e24-49285bd605ad" name="Changes" comment="remove openapi import">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/REServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/REServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sales/HomeSale.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sales/SalesController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sales/SalesDAO.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,12 +33,12 @@
     &quot;assignee&quot;: &quot;gortonator&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/gortonator/REServer.git&quot;,
-    &quot;accountId&quot;: &quot;7b8a9b25-7657-4afd-8d68-70e5dda30c83&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/gortonator/REServer.git",
+    "accountId": "1c29a538-ae69-46d6-b941-9f3d857e5528"
   }
-}</component>
+}]]></component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -45,7 +50,6 @@
   &quot;associatedIndex&quot;: 3
 }</component>
   <component name="ProjectId" id="2q3FPGovHE4vwevedoceD9Xl1eL" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -54,8 +58,11 @@
   &quot;keyToString&quot;: {
     &quot;Application.REServer.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -93,8 +100,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.22855.74" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.22855.74" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26830.84" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.26830.84" />
       </set>
     </attachedChunks>
   </component>
@@ -109,7 +116,12 @@
       <workItem from="1733883334259" duration="7168000" />
       <workItem from="1744088450565" duration="24918000" />
       <workItem from="1744234066152" duration="46271000" />
-      <workItem from="1746429621778" duration="977000" />
+      <workItem from="1746429621778" duration="2377000" />
+      <workItem from="1747608715301" duration="597000" />
+      <workItem from="1751335480462" duration="376000" />
+      <workItem from="1773778255041" duration="5443000" />
+      <workItem from="1773871403201" duration="1470000" />
+      <workItem from="1777867397029" duration="408000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -143,7 +155,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746429904403</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="remove openapi import">
+      <option name="closed" value="true" />
+      <created>1747096885680</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1747096885680</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -165,7 +185,8 @@
     <MESSAGE value="minor fixes" />
     <MESSAGE value="mods to tidy up code" />
     <MESSAGE value="remove unused imports" />
-    <option name="LAST_COMMIT_MESSAGE" value="remove unused imports" />
+    <MESSAGE value="remove openapi import" />
+    <option name="LAST_COMMIT_MESSAGE" value="remove openapi import" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

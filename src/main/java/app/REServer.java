@@ -1,8 +1,8 @@
 package app;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
-import sales.SalesDAO;
-import sales.SalesController;
+import property.PropertyDAO;
+import property.PropertyController;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,10 +15,10 @@ public class REServer {
         public static void main(String[] args) {
 
             // in memory test data store
-            var sales = new SalesDAO();
+            var properties = new PropertyDAO();
 
             // API implementation
-            SalesController salesHandler = new SalesController(sales);
+            PropertyController propertyHandler = new PropertyController(properties);
 
             // start Javalin on port 7070
             var app = Javalin.create()
@@ -28,23 +28,23 @@ public class REServer {
             // configure endpoint handlers to process HTTP requests
             JavalinConfig config = new JavalinConfig();
             config.router.apiBuilder(() -> {
-                // Sales records are immutable hence no PUT and DELETE
+                // Property records are immutable hence no PUT and DELETE
 
-                // return a sale by sale ID
-                app.get("/sales/{saleID}", ctx -> {
-                    salesHandler.getSaleByID(ctx, ctx.pathParam("saleID"));
+                // return a property by property ID
+                app.get("/property/{propertyID}", ctx -> {
+                    propertyHandler.getPropertyByID(ctx, ctx.pathParam("propertyID"));
                 });
-                // get all sales records - could be big!
-                app.get("/sales", ctx -> {
-                    salesHandler.getAllSales(ctx);
+                // get all property records - could be big!
+                app.get("/property", ctx -> {
+                    propertyHandler.getAllProperties(ctx);
                 });
-                // create a new sales record
-                app.post("/sales", ctx -> {
-                    salesHandler.createSale(ctx);
+                // create a new property record
+                app.post("/property", ctx -> {
+                    propertyHandler.createProperty(ctx);
                 });
-                // Get all sales for a specified postcode
-                app.get("/sales/postcode/{postcode}", ctx -> {
-                    salesHandler.findSaleByPostCode(ctx, ctx.pathParam("postcode"));
+                // Get all properties for a specified postcode
+                app.get("/property/postcode/{postcode}", ctx -> {
+                    propertyHandler.findPropertyByPostCode(ctx, ctx.pathParam("postcode"));
                 });
             });
 
