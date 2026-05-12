@@ -1,76 +1,90 @@
 package property;
 
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import org.bson.Document;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 public class PropertyDAO {
 
-    // List to hold test data
-    private List<Property> properties = new ArrayList<>();
-
+    private final MongoCollection<Document> collection;
+    private static final int MAX_RESULTS = 100; // hack to avoid returning millions of records
 
     public PropertyDAO() {
-        // create some test data
-        Random rand = new Random();
-        for (int i = 1; i < 51; i++) {
-            String postcode = String.valueOf(rand.nextInt(301) + 2000);   // 2000–2300
-            String price = String.valueOf(rand.nextInt(3500001) + 500000); // 500000–4000000
-            properties.add(new Property(String.valueOf(i), postcode, price));
-        }
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        MongoDatabase database = mongoClient.getDatabase("realEstate");
+        collection = database.getCollection("properties");
+        System.out.println("Connected to MongoDB! Documents: " + collection.countDocuments());
     }
 
     public boolean newProperty(Property property) {
-        properties.add(property);
-        return true;
+        try {
+            Document doc = new Document()
+                    .append("property_id", property.propertyID)
+                    .append("post_code", property.postcode)
+                    .append("purchase_price", property.propertyPrice)
+                    .append("address", property.address)
+                    .append("council_name", property.councilName)
+                    .append("property_type", property.propertyType)
+                    .append("contract_date", property.contractDate)
+                    .append("settlement_date", property.settlementDate);
+            collection.insertOne(doc);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
-    // returns Optional wrapping a Property if id is found, empty Optional otherwise
     public Optional<Property> getPropertyById(String propertyID) {
-        for (Property p : properties) {
-            if (p.propertyID.equals(propertyID)) {
-                System.out.println("id found ");
-                return Optional.of(p);
-            }
-        }
-        return Optional.empty();
+        Document doc = collection.find(Filters.eq("property_id", propertyID)).first();
+        if (doc == null) return Optional.empty();
+        return Optional.of(docToProperty(doc));
     }
 
-    // returns a List of properties in a given postCode
     public List<Property> getPropertiesByPostCode(String postCode) {
-        System.out.println("postcode is: " + postCode);
-        List<Property> tmp = new ArrayList<>();
-        for (Property p : properties) {
-            if (p.postcode.equals(postCode)) {
-                tmp.add(p);
-                System.out.println("postcode found ");
-            }
+        List<Property> result = new ArrayList<>();
+        for (Document doc : collection.find(Filters.eq("post_code", postCode)).limit(MAX_RESULTS)) {
+            result.add(docToProperty(doc));
         }
-        return tmp == null ? Collections.emptyList() : tmp;
+        return result;
     }
 
-    // returns the individual prices for all properties. Potentially large
-    public List<String> getAllPropertyPrices() {
-        return properties.stream()
-                .map(e -> e.propertyPrice)
-                .collect(Collectors.toList());
-    }
-
-    // returns all properties. Potentially large
     public List<Property> getAllProperties() {
-        return properties.stream().collect(Collectors.toList());
+        List<Property> result = new ArrayList<>();
+        for (Document doc : collection.find().limit(MAX_RESULTS)) {
+            result.add(docToProperty(doc));
+        }
+        return result;
     }
 
-    // returns properties where propertyPrice is within [minPrice, maxPrice]
     public List<Property> getPropertiesByPriceRange(long minPrice, long maxPrice) {
-        return properties.stream()
-                .filter(p -> {
-                    long price = Long.parseLong(p.propertyPrice);
-                    return price >= minPrice && price <= maxPrice;
-                })
-                .collect(Collectors.toList());
+        List<Property> result = new ArrayList<>();
+        for (Document doc : collection.find(
+                Filters.and(
+                        Filters.gte("purchase_price", String.valueOf(minPrice)),
+                        Filters.lte("purchase_price", String.valueOf(maxPrice))
+                )).limit(MAX_RESULTS)) {
+            result.add(docToProperty(doc));
+        }
+        return result;
+    }
+
+    private Property docToProperty(Document doc) {
+        return new Property(
+                doc.getString("property_id"),
+                doc.getString("post_code"),
+                doc.getString("purchase_price"),
+                doc.getString("address"),
+                doc.getString("council_name"),
+                doc.getString("property_type"),
+                doc.getString("contract_date"),
+                doc.getString("settlement_date")
+        );
     }
 }
