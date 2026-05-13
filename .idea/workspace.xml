@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="de501043-aafb-4a41-9e24-49285bd605ad" name="Changes" comment="remove openapi import">
-      <change afterPath="$PROJECT_DIR$/src/main/java/property/SyntheticPurchaserData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/property/SyntheticPropertySales.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -53,6 +53,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.REServer.executor": "Run",
+    "Application.SyntheticPropertySales.executor": "Run",
     "Application.SyntheticPurchaserData.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
@@ -74,13 +75,26 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.SyntheticPurchaserData">
+  <component name="RunManager" selected="Application.SyntheticPropertySales">
     <configuration name="REServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="app.REServer" />
       <module name="REServer" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="app.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SyntheticPropertySales" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="property.SyntheticPropertySales" />
+      <module name="REServer" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="property.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -103,6 +117,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.SyntheticPropertySales" />
         <item itemvalue="Application.SyntheticPurchaserData" />
         <item itemvalue="Application.REServer" />
       </list>
