@@ -9,6 +9,9 @@ import property.PropertyController;
 import property.PurchaserDAO;
 import property.PurchaserController;
 
+import property.ListingDAO;
+import property.ListingController;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +25,7 @@ public class REServer {
         // DAO objects
         var properties = new PropertyDAO();
         var purchasers = new PurchaserDAO();
+        var listings = new ListingDAO();
 
         // Controllers
         PropertyController propertyHandler =
@@ -29,6 +33,9 @@ public class REServer {
 
         PurchaserController purchaserHandler =
                 new PurchaserController(purchasers);
+
+        ListingController listingHandler =
+                new ListingController(listings);
 
         // start server
         var app = Javalin.create()
@@ -77,6 +84,39 @@ public class REServer {
             app.get("/purchaser", ctx -> {
                 purchaserHandler.getAllPurchasers(ctx);
             });
+
+
+            //LISTING ROUTES
+            app.post("/listing", ctx -> {
+                listingHandler.createListing(ctx);
+            });
+
+            app.get("/listing", ctx -> {
+                listingHandler.getAllListings(ctx);
+            });
+
+            app.get("/listing/{listingId}", ctx -> {
+                listingHandler.getListingById(
+                        ctx,
+                        ctx.pathParam("listingId")
+                );
+            });
+
+            app.get("/listing/property/{propertyId}", ctx -> {
+                listingHandler.getListingsByProperty(
+                        ctx,
+                        ctx.pathParam("propertyId")
+                );
+            });
+
+            app.post("/listing/{listingId}/price", ctx -> {
+                listingHandler.addPrice(
+                        ctx,
+                        ctx.pathParam("listingId")
+                );
+            });
+
+
         });
     }
 }
