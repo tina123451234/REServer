@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="de501043-aafb-4a41-9e24-49285bd605ad" name="Changes" comment="remove openapi import">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/REServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/REServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sales/HomeSale.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sales/SalesController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sales/SalesDAO.java" beforeDir="false" />
-    </list>
+    <list default="true" id="de501043-aafb-4a41-9e24-49285bd605ad" name="Changes" comment="remove openapi import" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,8 +28,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
-    "url": "https://github.com/gortonator/REServer.git",
-    "accountId": "1c29a538-ae69-46d6-b941-9f3d857e5528"
+    "url": "https://github.com/tina123451234/REServer.git",
+    "accountId": "e53abb17-14d3-4300-8477-5b5ac764a022"
   }
 }]]></component>
   <component name="KubernetesApiPersistence">{}</component>
@@ -100,8 +93,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26830.84" />
-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.26830.84" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.25557.131" />
       </set>
     </attachedChunks>
   </component>
