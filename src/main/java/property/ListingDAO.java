@@ -25,24 +25,25 @@ public class ListingDAO {
     System.out.println("Connected to MongoDB listings! Documents: " + listingCollection.countDocuments());
   }
 
-  // POST /listing — create a new listing for a property
+  // POST /listing
   public boolean newListing(Listing listing) {
     try {
       Document doc = new Document()
-              .append("listing_id",   listing.propertyId)
-              .append("property_id",  listing.propertyId)
-              .append("date_listed",  listing.dateListed);
+              .append("listing_id",  listing.propertyId)  // use propertyId as listing_id
+              .append("property_id", listing.propertyId)
+              .append("date_listed", listing.dateListed);
       listingCollection.insertOne(doc);
-      // store the initial price in listing_prices
+
       if (listing.initialPrice != null) {
         Document priceDoc = new Document()
-                .append("listing_id", listing.propertyId)
+                .append("listing_id", listing.propertyId)  // consistent key
                 .append("price",      listing.initialPrice)
                 .append("price_date", listing.dateListed);
         priceCollection.insertOne(priceDoc);
       }
       return true;
     } catch (Exception e) {
+      e.printStackTrace();  // actually log the error
       return false;
     }
   }
@@ -52,24 +53,23 @@ public class ListingDAO {
     Document doc = listingCollection.find(Filters.eq("listing_id", listingId)).first();
     if (doc == null) return Optional.empty();
     Listing listing = docToListing(doc);
-    listing.prices = getPricesForListing(listingId);
+    listing.prices = getPricesForListing(listingId);  // use the param, not listing.propertyId
     return Optional.of(listing);
   }
 
-  // GET /listing/property/{propertyId} — all listings for a property
+  // GET /listing/property/{propertyId}
   public List<Listing> getListingsByPropertyId(String propertyId) {
     List<Listing> result = new ArrayList<>();
     for (Document doc : listingCollection.find(Filters.eq("property_id", propertyId)).limit(MAX_RESULTS)) {
       Listing listing = docToListing(doc);
-      listing.prices = getPricesForListing(listing.propertyId);
+      listing.prices = getPricesForListing(doc.getString("listing_id"));  // fix: use listing_id from doc
       result.add(listing);
     }
     return result;
   }
 
-  // POST /listing/{listingId}/price — add a new price to an existing listing
+  // POST /listing/{listingId}/price
   public boolean addPrice(String listingId, ListingPrice price) {
-    // check listing exists first
     Document listing = listingCollection.find(Filters.eq("listing_id", listingId)).first();
     if (listing == null) return false;
     try {
@@ -80,11 +80,12 @@ public class ListingDAO {
       priceCollection.insertOne(priceDoc);
       return true;
     } catch (Exception e) {
+      e.printStackTrace();
       return false;
     }
   }
 
-  // Get all prices for a listing (price history)
+  // Get all prices for a listing
   public List<ListingPrice> getPricesForListing(String listingId) {
     List<ListingPrice> result = new ArrayList<>();
     for (Document doc : priceCollection.find(Filters.eq("listing_id", listingId))) {
@@ -93,12 +94,12 @@ public class ListingDAO {
     return result;
   }
 
-  // Get all listings
+  // GET /listing
   public List<Listing> getAllListings() {
     List<Listing> result = new ArrayList<>();
     for (Document doc : listingCollection.find().limit(MAX_RESULTS)) {
       Listing listing = docToListing(doc);
-      listing.prices = getPricesForListing(listing.propertyId);
+      listing.prices = getPricesForListing(doc.getString("listing_id"));  // fix: use listing_id from doc
       result.add(listing);
     }
     return result;
@@ -118,8 +119,8 @@ public class ListingDAO {
             doc.getString("listing_id")
     );
     price.propertyID = doc.getString("listing_id");
-    price.price     = doc.getString("price");
-    price.priceDate = doc.getString("price_date");
+    price.price      = doc.getString("price");
+    price.priceDate  = doc.getString("price_date");
     return price;
   }
 }
