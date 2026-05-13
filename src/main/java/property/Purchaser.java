@@ -1,18 +1,27 @@
 package property;
 
 import java.util.List;
-import java.util.ArrayList;
 
 public class Purchaser {
-  public String purchaserId;
+
+  public String purchaserID;
   public String name;
   public String email;
-  public String phone;
-  public List<String> postcodes = new ArrayList<>(); // max 5
+  public List<String> interestedPostcodes;
 
-  public Purchaser(String name, String email, String phone) {
+  // REQUIRED for JSON deserialization
+  public Purchaser() {
+  }
+
+  public Purchaser(
+          String purchaserID,
+          String name,
+          String email,
+          List<String> interestedPostcodes
+  ) {
+    this.purchaserID = purchaserID;
     this.name = name;
     this.email = email;
-    this.phone = phone;
+    this.interestedPostcodes = interestedPostcodes;
   }
 }
