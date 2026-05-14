@@ -3,6 +3,7 @@ package app;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
 
+import property.NotificationService;
 import property.PropertyDAO;
 import property.PropertyController;
 
@@ -11,6 +12,8 @@ import property.PurchaserController;
 
 import property.ListingDAO;
 import property.ListingController;
+
+import property.NotificationController;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +39,13 @@ public class REServer {
 
         ListingController listingHandler =
                 new ListingController(listings);
+
+        // in the DAO section
+        NotificationService notificationService =
+                new NotificationService(listings, properties, purchasers);
+        NotificationController notificationHandler =
+                new NotificationController(notificationService);
+
 
         // start server
         var app = Javalin.create()
@@ -114,6 +124,12 @@ public class REServer {
                         ctx,
                         ctx.pathParam("listingId")
                 );
+            });
+
+            //NOTIFICATION
+
+            app.get("/notify", ctx -> {
+                notificationHandler.notify(ctx);
             });
 
 
