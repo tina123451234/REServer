@@ -1,134 +1,98 @@
 package app;
 
 import io.javalin.Javalin;
-import io.javalin.config.JavalinConfig;
+import io.javalin.apibuilder.ApiBuilder;
+import io.javalin.openapi.plugin.OpenApiPlugin;
+import io.javalin.openapi.plugin.swagger.SwaggerPlugin;
 
-import property.NotificationService;
-import property.PropertyDAO;
-import property.PropertyController;
-
-import property.PurchaserDAO;
-import property.PurchaserController;
-
-import property.ListingDAO;
-import property.ListingController;
-
-import property.NotificationController;
-
-
+import property.*;
 
 public class REServer {
 
-    public static void main(String[] args) {
+  public static void main(String[] args) {
 
-        // DAO objects
-        var properties = new PropertyDAO();
-        var purchasers = new PurchaserDAO();
-        var listings = new ListingDAO();
+    // DAOs
+    var properties = new PropertyDAO();
+    var purchasers = new PurchaserDAO();
+    var listings = new ListingDAO();
+    var stats = new PropertyStatsDAO();
 
-        // Controllers
-        PropertyController propertyHandler =
-                new PropertyController(properties);
+    // Controllers
+    PropertyController propertyHandler = new PropertyController(properties, stats);
+    PurchaserController purchaserHandler = new PurchaserController(purchasers);
+    ListingController listingHandler = new ListingController(listings);
 
-        PurchaserController purchaserHandler =
-                new PurchaserController(purchasers);
+    NotificationService notificationService =
+            new NotificationService(listings, properties, purchasers, stats);
+    NotificationController notificationHandler =
+            new NotificationController(notificationService);
 
-        ListingController listingHandler =
-                new ListingController(listings);
+    // Everything inside create() — config, plugins, routes
+    Javalin.create(config -> {
 
-        // in the DAO section
-        NotificationService notificationService =
-                new NotificationService(listings, properties, purchasers);
-        NotificationController notificationHandler =
-                new NotificationController(notificationService);
+      // OpenAPI + Swagger UI
+      config.registerPlugin(new OpenApiPlugin(pluginConfig ->
+              pluginConfig.withDefinitionConfiguration((version, def) ->
+                      def.withInfo(info -> {
+                        info.setTitle("Real Estate API");
+                        info.setVersion("1.0");
+                      })
+              )
+      ));
+      config.registerPlugin(new SwaggerPlugin());
 
+      // Routes
+      config.router.apiBuilder(() -> {
 
-        // start server
-        var app = Javalin.create()
-                .get("/", ctx ->
-                        ctx.result(
-                                "Real Estate server is running"
-                        )
-                )
-                .start(7070);
+        ApiBuilder.get("/", ctx ->
+                ctx.result("Real Estate server is running")
+        );
 
-        // Routes
-        JavalinConfig config = new JavalinConfig();
+        // PROPERTY
+        ApiBuilder.get("/property", ctx ->
+                propertyHandler.getAllProperties(ctx)
+        );
+        ApiBuilder.post("/property", ctx ->
+                propertyHandler.createProperty(ctx)
+        );
+        ApiBuilder.get("/property/{propertyID}", ctx ->
+                propertyHandler.getPropertyByID(ctx, ctx.pathParam("propertyID"))
+        );
+        ApiBuilder.get("/property/postcode/{postcode}", ctx ->
+                propertyHandler.findPropertyByPostCode(ctx, ctx.pathParam("postcode"))
+        );
 
-        config.router.apiBuilder(() -> {
+        // PURCHASER
+        ApiBuilder.post("/purchaser", ctx ->
+                purchaserHandler.createPurchaser(ctx)
+        );
+        ApiBuilder.get("/purchaser", ctx ->
+                purchaserHandler.getAllPurchasers(ctx)
+        );
 
-            // PROPERTY ROUTES
+        // LISTING
+        ApiBuilder.post("/listing", ctx ->
+                listingHandler.createListing(ctx)
+        );
+        ApiBuilder.get("/listing", ctx ->
+                listingHandler.getAllListings(ctx)
+        );
+        ApiBuilder.get("/listing/{listingId}", ctx ->
+                listingHandler.getListingById(ctx, ctx.pathParam("listingId"))
+        );
+        ApiBuilder.get("/listing/property/{propertyId}", ctx ->
+                listingHandler.getListingsByProperty(ctx, ctx.pathParam("propertyId"))
+        );
+        ApiBuilder.post("/listing/{listingId}/price", ctx ->
+                listingHandler.addPrice(ctx, ctx.pathParam("listingId"))
+        );
 
-            app.get("/property/{propertyID}", ctx -> {
-                propertyHandler.getPropertyByID(
-                        ctx,
-                        ctx.pathParam("propertyID")
-                );
-            });
+        // NOTIFICATION
+        ApiBuilder.get("/notify", ctx ->
+                notificationHandler.notify(ctx)
+        );
+      });
 
-            app.get("/property", ctx -> {
-                propertyHandler.getAllProperties(ctx);
-            });
-
-            app.post("/property", ctx -> {
-                propertyHandler.createProperty(ctx);
-            });
-
-            app.get("/property/postcode/{postcode}", ctx -> {
-                propertyHandler.findPropertyByPostCode(
-                        ctx,
-                        ctx.pathParam("postcode")
-                );
-            });
-
-            // PURCHASER ROUTES
-
-            app.post("/purchaser", ctx -> {
-                purchaserHandler.createPurchaser(ctx);
-            });
-
-            app.get("/purchaser", ctx -> {
-                purchaserHandler.getAllPurchasers(ctx);
-            });
-
-
-            //LISTING ROUTES
-            app.post("/listing", ctx -> {
-                listingHandler.createListing(ctx);
-            });
-
-            app.get("/listing", ctx -> {
-                listingHandler.getAllListings(ctx);
-            });
-
-            app.get("/listing/{listingId}", ctx -> {
-                listingHandler.getListingById(
-                        ctx,
-                        ctx.pathParam("listingId")
-                );
-            });
-
-            app.get("/listing/property/{propertyId}", ctx -> {
-                listingHandler.getListingsByProperty(
-                        ctx,
-                        ctx.pathParam("propertyId")
-                );
-            });
-
-            app.post("/listing/{listingId}/price", ctx -> {
-                listingHandler.addPrice(
-                        ctx,
-                        ctx.pathParam("listingId")
-                );
-            });
-
-            //NOTIFICATION
-
-            app.get("/notify", ctx -> {
-                notificationHandler.notify(ctx);
-            });
-
-
-        });
-    }
+    }).start(7070);
+  }
 }
